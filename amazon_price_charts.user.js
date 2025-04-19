@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Amazon Price Charts
-// @version      1.0.0
+// @version      1.0.1
 // @description  Add CamelCamelCamel and Keepa price charts to Amazon product pages.
 // @author       CathalBahn miki
 // @namespace    https://github.com/cathalbahn/UserScripts
@@ -21,7 +21,10 @@
         const cache = new Map();
         return function(...args) {
             const key = JSON.stringify(args);
-            if (cache.has(key)) return cache.get(key);
+            if (cache.has(key)) {
+                console.log("[APC] ASIN in cache.");
+                return cache.get(key);
+            }
             const result = fn.apply(this, args);
             cache.set(key, result);
             return result;
@@ -30,12 +33,16 @@
 
     // Efficiently fetch ASIN from page with memoization
     const getASIN = memoize(() => {
-        const asinElement = document.getElementById("ASIN") || document.querySelector('input[name="ASIN"]');
+        const asinElement = document.getElementById("ASIN")?.value
+            || document.querySelector('input[name="ASIN"]')?.value
+            || document.getElementById('unqualifiedConfigurableBuyBox_feature_div')?.getAttribute('data-csa-c-asin')
+            || document.getElementById('buyNow_feature_div')?.getAttribute('data-csa-c-asin')
+            || document.getElementById('mediaBlockEntities')?.getAttribute('data-asin');
         if (!asinElement) {
             console.error("[APC] Unable to find ASIN on the page.");
             return null;
         }
-        return asinElement.value;
+        return asinElement;
     });
 
     // Create chart container with minimal overhead
@@ -55,7 +62,7 @@
 
     // Efficient insertion of price charts
     const insertPriceCharts = (asin, country) => {
-        const parentElement = document.getElementById("unifiedPrice_feature_div") || document.querySelector("#MediaMatrix");
+        const parentElement = document.getElementById("unifiedPrice_feature_div") || document.querySelector("#MediaMatrix") || document.getElementById('productTitleGroupAnchor');
         if (!parentElement) {
             return console.error("[APC] Unable to find a suitable parent element for inserting the price charts.");
         }
@@ -71,6 +78,7 @@
         parentElement.appendChild(chartsContainer);
     };
 
+    console.log("[APC] Start");
     // Main execution with optimized logic
     const asin = getASIN();
     if (asin) {
