@@ -7,6 +7,7 @@
 // @updateURL    https://github.com/cathalbahn/UserScripts/raw/main/yt_sponsor_block.user.js
 // @downloadURL  https://github.com/cathalbahn/UserScripts/raw/main/yt_sponsor_block.user.js
 // @include      https://*.youtube.com/watch?v=*
+// @match        https://*.youtube.com/*
 // @match        www.youtube.com
 // @match        www.youtube-nocookie.com
 // @match        music.youtube.com

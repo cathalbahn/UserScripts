@@ -6,7 +6,7 @@
 // @namespace    https://github.com/cathalbahn/UserScripts
 // @updateURL    https://github.com/cathalbahn/UserScripts/raw/main/pip.user.js
 // @downloadURL  https://github.com/cathalbahn/UserScripts/raw/main/pip.user.js
-// @match        *
+// @match        https://*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // ==/UserScript==
 
